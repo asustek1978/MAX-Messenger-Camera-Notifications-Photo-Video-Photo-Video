@@ -20,7 +20,7 @@ For each event you can choose **Photo + video**, **Photo only**, or **Video only
 
 Repository:
 
-`https://github.com/asustek1978/MAX-Messenger-Camera-Notifications-Photo-Video-Photo-Video`
+`https://github.com/asustek1978/MAX-Messenger-Notifications`
 
 Actions:
 
@@ -36,7 +36,7 @@ max_messenger.answer_callback
 
 ## Blueprint import
 
-`https://github.com/asustek1978/MAX-Messenger-Camera-Notifications-Photo-Video-Photo-Video/blob/main/blueprints/automation/max_messenger/camera_notifications.yaml`
+`https://github.com/asustek1978/MAX-Messenger-Notifications/blob/main/blueprints/automation/max_messenger/camera_notifications.yaml`
 
 In Home Assistant open **Settings → Automations & scenes → Blueprints → Import blueprint**.
 
