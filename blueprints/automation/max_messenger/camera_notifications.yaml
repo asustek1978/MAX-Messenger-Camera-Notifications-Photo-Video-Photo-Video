@@ -1,46 +1,34 @@
 blueprint:
-  name: "Slava MAX — Camera photo / video notifications"
+  name: "MAX Messenger Notifications — Camera photo / video"
   description: >
-    Send a camera photo, video, or both to MAX Messenger from Home Assistant.
+    Send a camera snapshot, a recorded video, or both to MAX Messenger
+    when one or more Home Assistant triggers fire.
 
-    The trigger is fully configurable, so you can use motion, person detection,
-    a doorbell, a binary sensor, or any other Home Assistant trigger.
-
-    Media modes:
-    - Photo + video
-    - Photo only
-    - Video only
-
-    Video recording uses camera.record, so the selected camera integration
-    must support recording.
-
-    Requires Slava MAX 0.5.5 or newer.
+    Requires the MAX Messenger Notifications custom integration v0.6.0 or newer.
+    Video mode requires a camera entity that supports camera.record.
   domain: automation
-
-  homeassistant:
-    min_version: 2024.6.0
 
   input:
     trigger_additional:
       name: "Trigger(s)"
       description: >
-        Add one or more Home Assistant triggers, for example motion,
-        person detection, a doorbell, or another event.
+        Select one or more triggers, for example motion, person detection,
+        doorbell, door opening, or another Home Assistant trigger.
       default: []
       selector:
         trigger: {}
 
     camera:
       name: "Camera"
-      description: "Camera used for snapshots and video recording."
+      description: "Camera used for snapshots and/or video recording."
       selector:
         entity:
-          domain: camera
-          multiple: false
+          filter:
+            - domain: camera
 
     media_mode:
       name: "Media to send"
-      description: "Choose whether to send a photo, video, or both."
+      description: "Choose photo, video, or both."
       default: photo_video
       selector:
         select:
@@ -54,14 +42,14 @@ blueprint:
 
     conditions:
       name: "Conditions"
-      description: "Optional conditions for the automation."
+      description: "Optional conditions that must be true before sending."
       default: []
       selector:
         condition: {}
 
     snapshot_delay:
       name: "Delay before snapshot"
-      description: "Optional delay after the trigger before taking the photo."
+      description: "Useful when the camera needs a moment after motion is detected."
       default:
         seconds: 1
       selector:
@@ -69,21 +57,21 @@ blueprint:
 
     snapshot_file:
       name: "Snapshot file"
-      description: "Full path for the latest JPEG snapshot. /media is recommended."
-      default: "/media/slava_max_camera_latest.jpg"
+      description: "Must be writable by Home Assistant. /media is recommended."
+      default: "/media/max_messenger_camera_latest.jpg"
       selector:
         text: {}
 
     video_file:
       name: "Video file"
-      description: "Full path for the latest recorded video. /media is recommended."
-      default: "/media/slava_max_camera_latest.mp4"
+      description: "Must be writable by Home Assistant. /media is recommended."
+      default: "/media/max_messenger_camera_latest.mp4"
       selector:
         text: {}
 
     video_duration:
       name: "Video duration"
-      description: "Recording duration in seconds."
+      description: "How many seconds to record."
       default: 10
       selector:
         number:
@@ -95,11 +83,10 @@ blueprint:
 
     photo_message:
       name: "Photo message"
-      description: "Supports Home Assistant templates."
       default: >-
         📷 **Camera event**
 
-        Camera: {{ state_attr(selected_camera, 'friendly_name') or selected_camera }}
+        Camera: {{ state_attr(camera_entity, 'friendly_name') or camera_entity }}
         Time: {{ now().strftime('%H:%M:%S') }}
       selector:
         text:
@@ -107,11 +94,10 @@ blueprint:
 
     video_message:
       name: "Video message"
-      description: "Supports Home Assistant templates."
       default: >-
-        🎥 **Camera event — video**
+        🎥 **Camera event video**
 
-        Camera: {{ state_attr(selected_camera, 'friendly_name') or selected_camera }}
+        Camera: {{ state_attr(camera_entity, 'friendly_name') or camera_entity }}
         Time: {{ now().strftime('%H:%M:%S') }}
       selector:
         text:
@@ -120,58 +106,55 @@ blueprint:
     user_ids:
       name: "MAX recipients"
       description: >
-        Optional. Enter MAX user IDs separated by commas,
-        for example: 123456789, 987654321.
-        Leave empty to send to every enabled Slava MAX user who has
-        the notifications permission and the required permission below.
+        Optional comma-separated MAX user IDs, for example:
+        123456789, 987654321.
+        Leave empty to send to every enabled user allowed by the integration ACL.
       default: ""
       selector:
         text: {}
 
     required_permission:
-      name: "Required Slava MAX permission"
+      name: "Required permission"
       description: >
-        Additional ACL permission required for recipients.
-        The notifications permission is always checked automatically.
+        ACL permission required for recipients. Keep "cameras" unless you use
+        another permission model.
       default: "cameras"
       selector:
         text: {}
 
     max_notify:
-      name: "Show MAX notification"
+      name: "MAX notification"
+      description: "Whether MAX should show a notification for the message."
       default: true
       selector:
         boolean: {}
 
     cooldown:
       name: "Cooldown"
-      description: >
-        While this delay is running, new triggers are ignored because
-        the automation runs in single mode.
+      description: "Delay before this single-mode automation can run again."
       default:
         seconds: 30
       selector:
         duration: {}
 
     additional_actions_before:
-      name: "Actions before media capture"
+      name: "Additional actions before sending"
       default: []
       selector:
         action: {}
 
     additional_actions_after:
-      name: "Actions after sending"
+      name: "Additional actions after sending"
       default: []
       selector:
         action: {}
 
 trigger: !input trigger_additional
-
 condition: !input conditions
 
 variables:
-  selected_camera: !input camera
   selected_media_mode: !input media_mode
+  camera_entity: !input camera
   max_user_ids_text: !input user_ids
   max_user_ids: >-
     {% set raw = (max_user_ids_text | string | trim) %}
@@ -192,17 +175,14 @@ action:
               {{ selected_media_mode in ['photo', 'photo_video'] }}
         sequence:
           - delay: !input snapshot_delay
-
           - action: camera.snapshot
             target:
               entity_id: !input camera
             data:
               filename: !input snapshot_file
-
           - delay:
               seconds: 1
-
-          - action: slava_max.broadcast_image
+          - action: max_messenger.broadcast_image
             data:
               file_path: !input snapshot_file
               message: !input photo_message
@@ -223,11 +203,9 @@ action:
             data:
               filename: !input video_file
               duration: !input video_duration
-
           - delay:
               seconds: 1
-
-          - action: slava_max.broadcast_video
+          - action: max_messenger.broadcast_video
             data:
               file_path: !input video_file
               message: !input video_message

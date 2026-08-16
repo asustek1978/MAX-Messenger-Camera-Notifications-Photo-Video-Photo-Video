@@ -1,9 +1,9 @@
 {
-  "title": "Slava MAX",
+  "title": "MAX Messenger Notifications",
   "config": {
     "step": {
       "user": {
-        "title": "Подключение Slava MAX",
+        "title": "Подключение MAX Messenger Notifications",
         "description": "Подключение бота MAX к Home Assistant.",
         "data": {
           "token": "Токен бота",
@@ -25,7 +25,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "Настройки Slava MAX",
+        "title": "Настройки MAX Messenger Notifications",
         "menu_options": {
           "general": "Основные настройки",
           "users": "Пользователи и права"

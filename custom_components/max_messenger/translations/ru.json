@@ -1,0 +1,107 @@
+{
+  "title": "MAX Messenger Notifications",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Подключение MAX Messenger Notifications",
+        "description": "Подключение бота MAX к Home Assistant.",
+        "data": {
+          "token": "Токен бота",
+          "target_type": "Тип получателя по умолчанию",
+          "target_id": "ID получателя по умолчанию",
+          "polling": "Получать сообщения и нажатия кнопок",
+          "allowed_users": "Разрешённые user_id (старый формат)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Не удалось подключиться к MAX API",
+      "invalid_auth": "MAX отклонил токен"
+    },
+    "abort": {
+      "already_configured": "Этот бот MAX уже настроен"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Настройки MAX Messenger Notifications",
+        "menu_options": {
+          "general": "Основные настройки",
+          "users": "Пользователи и права"
+        }
+      },
+      "general": {
+        "title": "Основные настройки",
+        "data": {
+          "target_type": "Тип получателя по умолчанию",
+          "target_id": "ID получателя по умолчанию",
+          "polling": "Получать события MAX",
+          "allowed_users": "Разрешённые user_id (старый формат)"
+        }
+      },
+      "users": {
+        "title": "Пользователи и права",
+        "description": "Пользователей: {count}. Сейчас: {users}",
+        "menu_options": {
+          "add_detected_user": "Добавить обнаруженного пользователя",
+          "add_user": "Добавить пользователя вручную",
+          "edit_user": "Изменить пользователя",
+          "delete_user": "Удалить пользователя"
+        }
+      },
+      "add_detected_user": {
+        "title": "Обнаруженные пользователи",
+        "data": {
+          "user_id": "Пользователь"
+        }
+      },
+      "add_detected_user_details": {
+        "title": "Добавить пользователя",
+        "description": "MAX user_id: {user_id}",
+        "data": {
+          "name": "Имя",
+          "enabled": "Доступ включён",
+          "permissions": "Права"
+        }
+      },
+      "add_user": {
+        "title": "Добавить пользователя",
+        "data": {
+          "user_id": "MAX user_id",
+          "name": "Имя",
+          "enabled": "Доступ включён",
+          "permissions": "Права"
+        }
+      },
+      "edit_user": {
+        "title": "Изменить пользователя",
+        "data": {
+          "user_id": "Пользователь"
+        }
+      },
+      "edit_user_details": {
+        "title": "Права пользователя",
+        "description": "MAX user_id: {user_id}",
+        "data": {
+          "name": "Имя",
+          "enabled": "Доступ включён",
+          "permissions": "Права"
+        }
+      },
+      "delete_user": {
+        "title": "Удалить пользователя",
+        "data": {
+          "user_id": "Пользователь"
+        }
+      },
+      "delete_user_confirm": {
+        "title": "Удалить пользователя",
+        "description": "Удалить {name} ({user_id})?"
+      }
+    },
+    "error": {
+      "user_exists": "Такой пользователь уже добавлен"
+    }
+  }
+}

@@ -13,11 +13,11 @@ from .const import API_BASE
 _LOGGER = logging.getLogger(__name__)
 
 
-class SlavaMaxApiError(Exception):
+class MaxMessengerApiError(Exception):
     """Base MAX API error."""
 
 
-class SlavaMaxAuthError(SlavaMaxApiError):
+class MaxMessengerAuthError(MaxMessengerApiError):
     """Authentication error."""
 
 
@@ -53,7 +53,7 @@ def _token_from_url(url: str) -> str | None:
     return None
 
 
-class SlavaMaxApi:
+class MaxMessengerApi:
     """Async client for the official MAX Bot API."""
 
     def __init__(self, session: aiohttp.ClientSession, token: str) -> None:
@@ -93,7 +93,7 @@ class SlavaMaxApi:
                 text = raw.decode("utf-8", errors="replace").strip()
 
                 if response.status == 401:
-                    raise SlavaMaxAuthError(
+                    raise MaxMessengerAuthError(
                         "MAX API отклонил токен бота (HTTP 401)"
                     )
 
@@ -106,7 +106,7 @@ class SlavaMaxApi:
                         response.status,
                         detail,
                     )
-                    raise SlavaMaxApiError(
+                    raise MaxMessengerApiError(
                         f"MAX API HTTP {response.status}: {detail}"
                     )
 
@@ -117,7 +117,7 @@ class SlavaMaxApi:
                     parsed = json.loads(text)
                 except (json.JSONDecodeError, ValueError):
                     if require_json:
-                        raise SlavaMaxApiError(
+                        raise MaxMessengerApiError(
                             "MAX API вернул некорректный JSON"
                         )
                     return {
@@ -136,19 +136,19 @@ class SlavaMaxApi:
                         "result": parsed,
                     }
 
-                raise SlavaMaxApiError("MAX API вернул JSON неожиданного типа")
+                raise MaxMessengerApiError("MAX API вернул JSON неожиданного типа")
 
         except asyncio.CancelledError:
             raise
-        except SlavaMaxApiError:
+        except MaxMessengerApiError:
             raise
         except (aiohttp.ClientError, TimeoutError) as err:
-            raise SlavaMaxApiError(
+            raise MaxMessengerApiError(
                 f"Ошибка соединения с MAX API: {err}"
             ) from err
         except Exception as err:
             _LOGGER.exception("Unexpected MAX API error")
-            raise SlavaMaxApiError(
+            raise MaxMessengerApiError(
                 f"Неожиданная ошибка MAX API: {type(err).__name__}: {err}"
             ) from err
 
@@ -240,7 +240,7 @@ class SlavaMaxApi:
         }
 
         delays = (0.8, 1.5, 3.0)
-        last_error: SlavaMaxApiError | None = None
+        last_error: MaxMessengerApiError | None = None
 
         for attempt in range(len(delays) + 1):
             try:
@@ -254,7 +254,7 @@ class SlavaMaxApi:
                     disable_link_preview=disable_link_preview,
                     attachments=[attachment],
                 )
-            except SlavaMaxApiError as err:
+            except MaxMessengerApiError as err:
                 last_error = err
                 if "attachment.not.ready" not in str(err).lower():
                     raise
@@ -264,7 +264,7 @@ class SlavaMaxApi:
 
         if last_error is not None:
             raise last_error
-        raise SlavaMaxApiError("Неизвестная ошибка отправки изображения")
+        raise MaxMessengerApiError("Неизвестная ошибка отправки изображения")
 
     async def upload_image(
         self,
@@ -281,7 +281,7 @@ class SlavaMaxApi:
 
         upload_url = str(upload_info.get("url") or "").strip()
         if not upload_url:
-            raise SlavaMaxApiError(
+            raise MaxMessengerApiError(
                 "MAX API не вернул URL для загрузки изображения"
             )
 
@@ -307,7 +307,7 @@ class SlavaMaxApi:
 
                 if response.status >= 400:
                     detail = text[:1500] if text else "пустой ответ"
-                    raise SlavaMaxApiError(
+                    raise MaxMessengerApiError(
                         f"MAX image upload HTTP {response.status}: {detail}"
                     )
 
@@ -322,15 +322,15 @@ class SlavaMaxApi:
 
         except asyncio.CancelledError:
             raise
-        except SlavaMaxApiError:
+        except MaxMessengerApiError:
             raise
         except (aiohttp.ClientError, TimeoutError) as err:
-            raise SlavaMaxApiError(
+            raise MaxMessengerApiError(
                 f"Ошибка загрузки изображения в MAX: {err}"
             ) from err
 
         if not token:
-            raise SlavaMaxApiError(
+            raise MaxMessengerApiError(
                 "MAX не вернул token после загрузки изображения"
             )
 
@@ -354,7 +354,7 @@ class SlavaMaxApi:
         }
 
         delays = (1.0, 2.0, 4.0, 7.0)
-        last_error: SlavaMaxApiError | None = None
+        last_error: MaxMessengerApiError | None = None
 
         for attempt in range(len(delays) + 1):
             try:
@@ -368,7 +368,7 @@ class SlavaMaxApi:
                     disable_link_preview=disable_link_preview,
                     attachments=[attachment],
                 )
-            except SlavaMaxApiError as err:
+            except MaxMessengerApiError as err:
                 last_error = err
                 if "attachment.not.ready" not in str(err).lower():
                     raise
@@ -378,7 +378,7 @@ class SlavaMaxApi:
 
         if last_error is not None:
             raise last_error
-        raise SlavaMaxApiError("Неизвестная ошибка отправки видео")
+        raise MaxMessengerApiError("Неизвестная ошибка отправки видео")
 
     async def upload_video(
         self,
@@ -395,7 +395,7 @@ class SlavaMaxApi:
 
         upload_url = str(upload_info.get("url") or "").strip()
         if not upload_url:
-            raise SlavaMaxApiError(
+            raise MaxMessengerApiError(
                 "MAX API не вернул URL для загрузки видео"
             )
 
@@ -421,7 +421,7 @@ class SlavaMaxApi:
 
                 if response.status >= 400:
                     detail = text[:1500] if text else "пустой ответ"
-                    raise SlavaMaxApiError(
+                    raise MaxMessengerApiError(
                         f"MAX video upload HTTP {response.status}: {detail}"
                     )
 
@@ -435,15 +435,15 @@ class SlavaMaxApi:
 
         except asyncio.CancelledError:
             raise
-        except SlavaMaxApiError:
+        except MaxMessengerApiError:
             raise
         except (aiohttp.ClientError, TimeoutError) as err:
-            raise SlavaMaxApiError(
+            raise MaxMessengerApiError(
                 f"Ошибка загрузки видео в MAX: {err}"
             ) from err
 
         if not token:
-            raise SlavaMaxApiError(
+            raise MaxMessengerApiError(
                 "MAX не вернул token после загрузки видео"
             )
 

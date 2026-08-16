@@ -1,4 +1,4 @@
-DOMAIN = "slava_max"
+DOMAIN = "max_messenger"
 
 CONF_TOKEN = "token"
 CONF_TARGET_TYPE = "target_type"
@@ -46,8 +46,8 @@ PERMISSIONS = [
 TARGET_CHAT = "chat_id"
 TARGET_USER = "user_id"
 
-EVENT_NAME = "slava_max_event"
-EVENT_ACCESS_REQUEST = "slava_max_access_request"
+EVENT_NAME = "max_messenger_event"
+EVENT_ACCESS_REQUEST = "max_messenger_access_request"
 
 SERVICE_SEND_MESSAGE = "send_message"
 SERVICE_BROADCAST = "broadcast"
@@ -57,5 +57,5 @@ SERVICE_BROADCAST_IMAGE = "broadcast_image"
 SERVICE_SEND_VIDEO = "send_video"
 SERVICE_BROADCAST_VIDEO = "broadcast_video"
 
-# Current MAX API domain since July 2026.
+# Актуальный домен MAX API с июля 2026.
 API_BASE = "https://platform-api2.max.ru"

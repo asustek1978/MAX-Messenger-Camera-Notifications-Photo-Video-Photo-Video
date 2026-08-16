@@ -1,0 +1,17 @@
+sequence:
+  - action: camera.snapshot
+    target:
+      entity_id: camera.example
+    data:
+      filename: /media/max_messenger_camera_test.jpg
+
+  - delay:
+      seconds: 1
+
+  - action: max_messenger.broadcast_image
+    data:
+      file_path: /media/max_messenger_camera_test.jpg
+      message: "📷 Camera test"
+      required_permission: cameras
+      format: markdown
+      notify: true

@@ -6,7 +6,7 @@ send_message:
       required: false
       selector:
         config_entry:
-          integration: slava_max
+          integration: max_messenger
     message:
       name: Сообщение
       required: true
@@ -61,7 +61,7 @@ broadcast:
       required: false
       selector:
         config_entry:
-          integration: slava_max
+          integration: max_messenger
     message:
       name: Сообщение
       required: true
@@ -110,10 +110,10 @@ send_image:
       required: false
       selector:
         config_entry:
-          integration: slava_max
+          integration: max_messenger
     file_path:
       name: Путь к изображению
-      description: Например /media/slava_max_camera_latest.jpg
+      description: Например /media/max_messenger_camera_latest.jpg
       required: true
       selector:
         text:
@@ -168,10 +168,10 @@ broadcast_image:
       required: false
       selector:
         config_entry:
-          integration: slava_max
+          integration: max_messenger
     file_path:
       name: Путь к изображению
-      description: Например /media/slava_max_camera_latest.jpg
+      description: Например /media/max_messenger_camera_latest.jpg
       required: true
       selector:
         text:
@@ -225,7 +225,7 @@ answer_callback:
       required: false
       selector:
         config_entry:
-          integration: slava_max
+          integration: max_messenger
     callback_id:
       required: true
       selector:
@@ -257,10 +257,10 @@ send_video:
       required: false
       selector:
         config_entry:
-          integration: slava_max
+          integration: max_messenger
     file_path:
       name: Путь к видео
-      description: Например /media/slava_max_camera_latest.mp4
+      description: Например /media/max_messenger_camera_latest.mp4
       required: true
       selector:
         text:
@@ -319,10 +319,10 @@ broadcast_video:
       required: false
       selector:
         config_entry:
-          integration: slava_max
+          integration: max_messenger
     file_path:
       name: Путь к видео
-      description: Например /media/slava_max_camera_latest.mp4
+      description: Например /media/max_messenger_camera_latest.mp4
       required: true
       selector:
         text:

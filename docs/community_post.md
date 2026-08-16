@@ -1,56 +1,47 @@
-# [Blueprint] MAX Messenger camera notifications — photo, video or both
+# MAX Messenger Notifications — Camera Photo / Video / Photo+Video
 
-Send camera events from Home Assistant to **MAX Messenger**.
+This Home Assistant blueprint sends camera events to **MAX Messenger** using the companion **MAX Messenger Notifications** custom integration.
 
-This blueprint works with the **Slava MAX** custom integration and supports:
+## What it does
 
-- Photo + video
-- Photo only
-- Video only
-- Any Home Assistant trigger
-- Optional conditions
-- Configurable video duration
-- Multiple MAX recipients
-- ACL-aware broadcast (`notifications` + `cameras`)
-- callback buttons and `slava_max_event` events for optional custom controls
+The automation can run from any Home Assistant trigger, for example camera motion, person detection, a doorbell, a door opening, or another automation trigger.
+
+For each event you can choose **Photo + video**, **Photo only**, or **Video only**. The blueprint also supports conditions, configurable snapshot delay, configurable video duration, cooldown protection, additional actions, and ACL-based recipients.
 
 ## Requirements
 
-- Home Assistant 2024.6.0+
-- Slava MAX 0.5.5+
-- A MAX bot configured in Slava MAX
-- For video: a camera entity that supports `camera.record`
+1. Home Assistant
+2. MAX Messenger Notifications custom integration v0.6.0+
+3. MAX bot token
+4. Camera entity
+5. For video: a camera that supports `camera.record`
 
-## Installation
+## Integration
 
-Install the Slava MAX integration from the GitHub repository, then import or
-copy the blueprint:
+Repository:
 
-`blueprints/automation/slava_max/camera_snapshot_max.yaml`
+`https://github.com/asustek1978/MAX-Messenger-Camera-Notifications-Photo-Video-Photo-Video`
 
-After importing it, create a new automation and select:
+Actions:
 
-1. your trigger (motion/person/doorbell/etc.);
-2. your camera;
-3. Photo + video / Photo only / Video only;
-4. optional MAX user IDs and permissions.
+```text
+max_messenger.send_message
+max_messenger.broadcast
+max_messenger.send_image
+max_messenger.broadcast_image
+max_messenger.send_video
+max_messenger.broadcast_video
+max_messenger.answer_callback
+```
 
-If the MAX recipients field is empty, Slava MAX broadcasts to all enabled
-users that have the required permissions.
+## Blueprint import
+
+`https://github.com/asustek1978/MAX-Messenger-Camera-Notifications-Photo-Video-Photo-Video/blob/main/blueprints/automation/max_messenger/camera_notifications.yaml`
+
+In Home Assistant open **Settings → Automations & scenes → Blueprints → Import blueprint**.
 
 ## Notes
 
-The blueprint does not contain any installation-specific entity IDs.
-Default files are stored under `/media`.
+The default output files use `/media`, so no personal paths or entity IDs are built into the blueprint. If **Video** or **Photo + video** is selected, verify `camera.record` works with your camera before using the blueprint.
 
-For video recording, `camera.record` must work for the selected camera.
-
-Slava MAX can expose callback events for custom bot controls. A complete
-smart-home menu/router is installation-specific and is not included in this
-camera-notification blueprint.
-
-## Project
-
-GitHub: https://github.com/asustek1978/MAX-Messenger-Camera-Notifications-Photo-Video-Photo-Video
-
-Feedback, traces and camera compatibility reports are welcome.
+Bug reports and improvements are welcome in the GitHub repository.
