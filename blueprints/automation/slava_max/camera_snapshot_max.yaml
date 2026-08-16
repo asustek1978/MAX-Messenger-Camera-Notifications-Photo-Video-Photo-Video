@@ -1,0 +1,245 @@
+blueprint:
+  name: "Slava MAX — Camera photo / video notifications"
+  description: >
+    Send a camera photo, video, or both to MAX Messenger from Home Assistant.
+
+    The trigger is fully configurable, so you can use motion, person detection,
+    a doorbell, a binary sensor, or any other Home Assistant trigger.
+
+    Media modes:
+    - Photo + video
+    - Photo only
+    - Video only
+
+    Video recording uses camera.record, so the selected camera integration
+    must support recording.
+
+    Requires Slava MAX 0.5.5 or newer.
+  domain: automation
+
+  homeassistant:
+    min_version: 2024.6.0
+
+  input:
+    trigger_additional:
+      name: "Trigger(s)"
+      description: >
+        Add one or more Home Assistant triggers, for example motion,
+        person detection, a doorbell, or another event.
+      default: []
+      selector:
+        trigger: {}
+
+    camera:
+      name: "Camera"
+      description: "Camera used for snapshots and video recording."
+      selector:
+        entity:
+          domain: camera
+          multiple: false
+
+    media_mode:
+      name: "Media to send"
+      description: "Choose whether to send a photo, video, or both."
+      default: photo_video
+      selector:
+        select:
+          options:
+            - label: "Photo + video"
+              value: photo_video
+            - label: "Photo only"
+              value: photo
+            - label: "Video only"
+              value: video
+
+    conditions:
+      name: "Conditions"
+      description: "Optional conditions for the automation."
+      default: []
+      selector:
+        condition: {}
+
+    snapshot_delay:
+      name: "Delay before snapshot"
+      description: "Optional delay after the trigger before taking the photo."
+      default:
+        seconds: 1
+      selector:
+        duration: {}
+
+    snapshot_file:
+      name: "Snapshot file"
+      description: "Full path for the latest JPEG snapshot. /media is recommended."
+      default: "/media/slava_max_camera_latest.jpg"
+      selector:
+        text: {}
+
+    video_file:
+      name: "Video file"
+      description: "Full path for the latest recorded video. /media is recommended."
+      default: "/media/slava_max_camera_latest.mp4"
+      selector:
+        text: {}
+
+    video_duration:
+      name: "Video duration"
+      description: "Recording duration in seconds."
+      default: 10
+      selector:
+        number:
+          min: 3
+          max: 60
+          step: 1
+          unit_of_measurement: s
+          mode: slider
+
+    photo_message:
+      name: "Photo message"
+      description: "Supports Home Assistant templates."
+      default: >-
+        📷 **Camera event**
+
+        Camera: {{ state_attr(selected_camera, 'friendly_name') or selected_camera }}
+        Time: {{ now().strftime('%H:%M:%S') }}
+      selector:
+        text:
+          multiline: true
+
+    video_message:
+      name: "Video message"
+      description: "Supports Home Assistant templates."
+      default: >-
+        🎥 **Camera event — video**
+
+        Camera: {{ state_attr(selected_camera, 'friendly_name') or selected_camera }}
+        Time: {{ now().strftime('%H:%M:%S') }}
+      selector:
+        text:
+          multiline: true
+
+    user_ids:
+      name: "MAX recipients"
+      description: >
+        Optional. Enter MAX user IDs separated by commas,
+        for example: 123456789, 987654321.
+        Leave empty to send to every enabled Slava MAX user who has
+        the notifications permission and the required permission below.
+      default: ""
+      selector:
+        text: {}
+
+    required_permission:
+      name: "Required Slava MAX permission"
+      description: >
+        Additional ACL permission required for recipients.
+        The notifications permission is always checked automatically.
+      default: "cameras"
+      selector:
+        text: {}
+
+    max_notify:
+      name: "Show MAX notification"
+      default: true
+      selector:
+        boolean: {}
+
+    cooldown:
+      name: "Cooldown"
+      description: >
+        While this delay is running, new triggers are ignored because
+        the automation runs in single mode.
+      default:
+        seconds: 30
+      selector:
+        duration: {}
+
+    additional_actions_before:
+      name: "Actions before media capture"
+      default: []
+      selector:
+        action: {}
+
+    additional_actions_after:
+      name: "Actions after sending"
+      default: []
+      selector:
+        action: {}
+
+trigger: !input trigger_additional
+
+condition: !input conditions
+
+variables:
+  selected_camera: !input camera
+  selected_media_mode: !input media_mode
+  max_user_ids_text: !input user_ids
+  max_user_ids: >-
+    {% set raw = (max_user_ids_text | string | trim) %}
+    {% if raw == '' %}
+      {{ [] }}
+    {% else %}
+      {{ raw.split(',') | map('trim') | reject('equalto', '') | map('int') | list }}
+    {% endif %}
+
+action:
+  - choose: []
+    default: !input additional_actions_before
+
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{ selected_media_mode in ['photo', 'photo_video'] }}
+        sequence:
+          - delay: !input snapshot_delay
+
+          - action: camera.snapshot
+            target:
+              entity_id: !input camera
+            data:
+              filename: !input snapshot_file
+
+          - delay:
+              seconds: 1
+
+          - action: slava_max.broadcast_image
+            data:
+              file_path: !input snapshot_file
+              message: !input photo_message
+              user_ids: "{{ max_user_ids }}"
+              required_permission: !input required_permission
+              format: markdown
+              notify: !input max_notify
+
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{ selected_media_mode in ['video', 'photo_video'] }}
+        sequence:
+          - action: camera.record
+            target:
+              entity_id: !input camera
+            data:
+              filename: !input video_file
+              duration: !input video_duration
+
+          - delay:
+              seconds: 1
+
+          - action: slava_max.broadcast_video
+            data:
+              file_path: !input video_file
+              message: !input video_message
+              user_ids: "{{ max_user_ids }}"
+              required_permission: !input required_permission
+              format: markdown
+              notify: !input max_notify
+
+  - choose: []
+    default: !input additional_actions_after
+
+  - delay: !input cooldown
+
+mode: single
+max_exceeded: silent
