@@ -1,0 +1,374 @@
+send_message:
+  name: Отправить сообщение
+  description: Отправляет текстовое сообщение через MAX.
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: slava_max
+    message:
+      name: Сообщение
+      required: true
+      selector:
+        text:
+          multiline: true
+    chat_id:
+      name: Chat ID
+      required: false
+      selector:
+        number:
+          mode: box
+    user_id:
+      name: User ID
+      required: false
+      selector:
+        number:
+          mode: box
+    format:
+      name: Формат
+      required: false
+      default: markdown
+      selector:
+        select:
+          options:
+            - markdown
+            - html
+            - plain
+    notify:
+      name: Уведомлять
+      required: false
+      default: true
+      selector:
+        boolean:
+    disable_link_preview:
+      name: Отключить превью ссылок
+      required: false
+      default: false
+      selector:
+        boolean:
+    buttons:
+      name: Кнопки
+      required: false
+      selector:
+        object:
+
+broadcast:
+  name: Рассылка сообщения
+  description: Отправляет текст нескольким разрешённым пользователям MAX.
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: slava_max
+    message:
+      name: Сообщение
+      required: true
+      selector:
+        text:
+          multiline: true
+    user_ids:
+      name: User ID получателей
+      required: false
+      selector:
+        object:
+    required_permission:
+      name: Необходимое право
+      required: false
+      selector:
+        text:
+    format:
+      required: false
+      default: markdown
+      selector:
+        select:
+          options:
+            - markdown
+            - html
+            - plain
+    notify:
+      required: false
+      default: true
+      selector:
+        boolean:
+    disable_link_preview:
+      required: false
+      default: false
+      selector:
+        boolean:
+    buttons:
+      required: false
+      selector:
+        object:
+
+send_image:
+  name: Отправить изображение
+  description: Загружает локальное изображение в MAX и отправляет одному получателю.
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: slava_max
+    file_path:
+      name: Путь к изображению
+      description: Например /media/slava_max_camera_latest.jpg
+      required: true
+      selector:
+        text:
+    message:
+      name: Сообщение
+      required: false
+      default: ""
+      selector:
+        text:
+          multiline: true
+    chat_id:
+      name: Chat ID
+      required: false
+      selector:
+        number:
+          mode: box
+    user_id:
+      name: User ID
+      required: false
+      selector:
+        number:
+          mode: box
+    format:
+      required: false
+      default: markdown
+      selector:
+        select:
+          options:
+            - markdown
+            - html
+            - plain
+    notify:
+      required: false
+      default: true
+      selector:
+        boolean:
+    disable_link_preview:
+      required: false
+      default: false
+      selector:
+        boolean:
+    buttons:
+      required: false
+      selector:
+        object:
+
+broadcast_image:
+  name: Рассылка изображения
+  description: Загружает локальное изображение и отправляет разрешённым пользователям MAX.
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: slava_max
+    file_path:
+      name: Путь к изображению
+      description: Например /media/slava_max_camera_latest.jpg
+      required: true
+      selector:
+        text:
+    message:
+      name: Сообщение
+      required: false
+      default: ""
+      selector:
+        text:
+          multiline: true
+    user_ids:
+      name: User ID получателей
+      description: Оставьте пустым для всех подходящих пользователей.
+      required: false
+      selector:
+        object:
+    required_permission:
+      name: Необходимое право
+      required: false
+      default: cameras
+      selector:
+        text:
+    format:
+      required: false
+      default: markdown
+      selector:
+        select:
+          options:
+            - markdown
+            - html
+            - plain
+    notify:
+      required: false
+      default: true
+      selector:
+        boolean:
+    disable_link_preview:
+      required: false
+      default: false
+      selector:
+        boolean:
+    buttons:
+      required: false
+      selector:
+        object:
+
+answer_callback:
+  name: Ответить на callback
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: slava_max
+    callback_id:
+      required: true
+      selector:
+        text:
+    message:
+      required: false
+      selector:
+        text:
+          multiline: true
+    format:
+      required: false
+      default: markdown
+      selector:
+        select:
+          options:
+            - markdown
+            - html
+            - plain
+    buttons:
+      required: false
+      selector:
+        object:
+
+send_video:
+  name: Отправить видео
+  description: Загружает локальное видео в MAX и отправляет одному получателю.
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: slava_max
+    file_path:
+      name: Путь к видео
+      description: Например /media/slava_max_camera_latest.mp4
+      required: true
+      selector:
+        text:
+    message:
+      name: Сообщение
+      required: false
+      default: ""
+      selector:
+        text:
+          multiline: true
+    chat_id:
+      name: Chat ID
+      required: false
+      selector:
+        number:
+          mode: box
+    user_id:
+      name: User ID
+      required: false
+      selector:
+        number:
+          mode: box
+    format:
+      name: Формат
+      required: false
+      default: markdown
+      selector:
+        select:
+          options:
+            - markdown
+            - html
+            - plain
+    notify:
+      name: Уведомлять
+      required: false
+      default: true
+      selector:
+        boolean:
+    disable_link_preview:
+      name: Отключить превью ссылок
+      required: false
+      default: false
+      selector:
+        boolean:
+    buttons:
+      name: Кнопки
+      required: false
+      selector:
+        object:
+
+broadcast_video:
+  name: Рассылка видео
+  description: Загружает локальное видео и отправляет разрешённым пользователям MAX.
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: slava_max
+    file_path:
+      name: Путь к видео
+      description: Например /media/slava_max_camera_latest.mp4
+      required: true
+      selector:
+        text:
+    message:
+      name: Сообщение
+      required: false
+      default: ""
+      selector:
+        text:
+          multiline: true
+    user_ids:
+      name: User ID получателей
+      description: Оставьте пустым для всех подходящих пользователей.
+      required: false
+      selector:
+        object:
+    required_permission:
+      name: Необходимое право
+      required: false
+      default: cameras
+      selector:
+        text:
+    format:
+      name: Формат
+      required: false
+      default: markdown
+      selector:
+        select:
+          options:
+            - markdown
+            - html
+            - plain
+    notify:
+      name: Уведомлять
+      required: false
+      default: true
+      selector:
+        boolean:
+    disable_link_preview:
+      name: Отключить превью ссылок
+      required: false
+      default: false
+      selector:
+        boolean:
+    buttons:
+      name: Кнопки
+      required: false
+      selector:
+        object:
