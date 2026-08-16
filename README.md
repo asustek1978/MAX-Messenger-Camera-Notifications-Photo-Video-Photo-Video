@@ -121,7 +121,7 @@ The blueprint supports:
 Use this public blueprint URL:
 
 ```text
-https://github.com/asustek1978/MAX-Messenger-Camera-Notifications-Photo-Video-Photo-Video/blob/main/blueprints/automation/max_messenger/camera_notifications.yaml
+https://github.com/asustek1978/MAX-Messenger-Notifications/blob/main/blueprints/automation/max_messenger/camera_notifications.yaml
 ```
 
 Then in Home Assistant:
