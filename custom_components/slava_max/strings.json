@@ -1,0 +1,107 @@
+{
+  "title": "Slava MAX",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Slava MAX",
+        "description": "Connect a MAX bot to Home Assistant.",
+        "data": {
+          "token": "Bot token",
+          "target_type": "Default recipient type",
+          "target_id": "Default recipient ID",
+          "polling": "Receive MAX messages and button callbacks",
+          "allowed_users": "Allowed user IDs (legacy format)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to the MAX API",
+      "invalid_auth": "MAX rejected the bot token"
+    },
+    "abort": {
+      "already_configured": "This MAX bot is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Slava MAX settings",
+        "menu_options": {
+          "general": "General settings",
+          "users": "Users and permissions"
+        }
+      },
+      "general": {
+        "title": "General settings",
+        "data": {
+          "target_type": "Default recipient type",
+          "target_id": "Default recipient ID",
+          "polling": "Receive MAX events",
+          "allowed_users": "Allowed user IDs (legacy format)"
+        }
+      },
+      "users": {
+        "title": "Users and permissions",
+        "description": "Users: {count}. Current: {users}",
+        "menu_options": {
+          "add_detected_user": "Add a detected user",
+          "add_user": "Add a user manually",
+          "edit_user": "Edit a user",
+          "delete_user": "Delete a user"
+        }
+      },
+      "add_detected_user": {
+        "title": "Detected users",
+        "data": {
+          "user_id": "User"
+        }
+      },
+      "add_detected_user_details": {
+        "title": "Add user",
+        "description": "MAX user_id: {user_id}",
+        "data": {
+          "name": "Name",
+          "enabled": "Access enabled",
+          "permissions": "Permissions"
+        }
+      },
+      "add_user": {
+        "title": "Add user",
+        "data": {
+          "user_id": "MAX user_id",
+          "name": "Name",
+          "enabled": "Access enabled",
+          "permissions": "Permissions"
+        }
+      },
+      "edit_user": {
+        "title": "Edit user",
+        "data": {
+          "user_id": "User"
+        }
+      },
+      "edit_user_details": {
+        "title": "User permissions",
+        "description": "MAX user_id: {user_id}",
+        "data": {
+          "name": "Name",
+          "enabled": "Access enabled",
+          "permissions": "Permissions"
+        }
+      },
+      "delete_user": {
+        "title": "Delete user",
+        "data": {
+          "user_id": "User"
+        }
+      },
+      "delete_user_confirm": {
+        "title": "Delete user",
+        "description": "Delete {name} ({user_id})?"
+      }
+    },
+    "error": {
+      "user_exists": "This user has already been added"
+    }
+  }
+}
