@@ -12,7 +12,7 @@ This blueprint works with the **Slava MAX** custom integration and supports:
 - Configurable video duration
 - Multiple MAX recipients
 - ACL-aware broadcast (`notifications` + `cameras`)
-- A `🏠 Smart Home` callback button below notifications
+- callback buttons and `slava_max_event` events for optional custom controls
 
 ## Requirements
 
@@ -44,6 +44,10 @@ The blueprint does not contain any installation-specific entity IDs.
 Default files are stored under `/media`.
 
 For video recording, `camera.record` must work for the selected camera.
+
+Slava MAX can expose callback events for custom bot controls. A complete
+smart-home menu/router is installation-specific and is not included in this
+camera-notification blueprint.
 
 ## Project
 
