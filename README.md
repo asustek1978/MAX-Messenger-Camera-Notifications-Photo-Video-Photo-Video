@@ -1,8 +1,7 @@
 # Slava MAX for Home Assistant
 
 Custom Home Assistant integration for **MAX Messenger** with notifications,
-camera photo/video delivery, multiple users, ACL permissions, callbacks,
-and smart-home control.
+camera photo/video delivery, multiple users, ACL permissions and callbacks.
 
 > Current public release: **0.5.5**
 
@@ -18,7 +17,7 @@ and smart-home control.
 - multiple MAX users
 - per-user permissions configured from the Home Assistant UI
 - `/start` and callback handling through long polling
-- `🏠 Smart Home` button below notification messages
+- callback events for optional custom bot controls
 - services for direct delivery and ACL-aware broadcast
 - background polling that does not block Home Assistant startup
 
@@ -93,6 +92,12 @@ slava_max.answer_callback
 Broadcast services use the Slava MAX ACL. Leaving `user_ids` empty sends to
 all enabled users that have the required permissions.
 
+### Callbacks
+
+The integration exposes MAX callback updates as Home Assistant events, so you
+can build your own bot controls and menus. A complete smart-home menu/router
+is installation-specific and is not part of this camera-notification project.
+
 ### Permissions
 
 The integration supports per-user permissions such as:
@@ -131,8 +136,8 @@ The integration supports per-user permissions such as:
 - произвольные триггеры и условия Home Assistant;
 - несколько пользователей MAX;
 - индивидуальные права пользователей через UI Home Assistant;
-- `/start` и callback-кнопки через Long Polling;
-- кнопка `🏠 Управление домом` под уведомлениями;
+- `/start` и callback-события через Long Polling;
+- события callback для собственных кнопок и меню бота;
 - прямая отправка и рассылка с проверкой ACL;
 - фоновый polling, который не задерживает запуск Home Assistant.
 
@@ -194,13 +199,19 @@ blueprints/automation/slava_max/camera_snapshot_max.yaml
 123456789, 987654321
 ```
 
+### Callback и собственное меню
+
+Интеграция передаёт callback MAX в события Home Assistant. На их основе можно
+сделать собственное меню управления. Готовый роутер конкретного умного дома в
+этот публичный проект камеры не входит.
+
 ## Repository structure
 
 ```text
-custom_components/slava_max/   Home Assistant integration
+custom_components/slava_max/     Home Assistant integration
 blueprints/automation/slava_max/ Camera automation blueprint
-docs/community_post.md         Ready-to-use Home Assistant Community post
-examples/                       Example automations
+docs/community_post.md           Ready-to-use Home Assistant Community post
+examples/                         Example automations
 ```
 
 ## Disclaimer
