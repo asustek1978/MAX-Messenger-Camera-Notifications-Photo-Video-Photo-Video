@@ -1,0 +1,27 @@
+alias: "MAX camera motion example"
+description: "Example automation using Slava MAX directly without the blueprint"
+triggers:
+  - trigger: state
+    entity_id: binary_sensor.example_motion
+    to: "on"
+actions:
+  - action: camera.snapshot
+    target:
+      entity_id: camera.example_camera
+    data:
+      filename: /media/slava_max_camera_latest.jpg
+
+  - delay:
+      seconds: 1
+
+  - action: slava_max.broadcast_image
+    data:
+      file_path: /media/slava_max_camera_latest.jpg
+      message: >-
+        📷 **Camera event**
+
+        Time: {{ now().strftime('%H:%M:%S') }}
+      required_permission: cameras
+      format: markdown
+      notify: true
+mode: single
