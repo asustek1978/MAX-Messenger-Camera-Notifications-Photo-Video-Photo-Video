@@ -3,9 +3,9 @@
   "name": "MAX Messenger Notifications",
   "version": "0.6.0",
   "config_flow": true,
-  "documentation": "https://github.com/asustek1978/MAX-Messenger-Camera-Notifications-Photo-Video-Photo-Video",
+  "documentation": "https://github.com/asustek1978/MAX-Messenger-Notifications",
   "iot_class": "cloud_polling",
   "integration_type": "service",
   "requirements": [],
-  "issue_tracker": "https://github.com/asustek1978/MAX-Messenger-Camera-Notifications-Photo-Video-Photo-Video/issues"
+  "issue_tracker": "https://github.com/asustek1978/MAX-Messenger-Notifications/issues"
 }
